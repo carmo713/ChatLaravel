@@ -109,25 +109,29 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#f0f4f8] to-[#e6f2ff]">
-        <div class="w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-gray-100">
+    <div class="flex items-center justify-center h-full">
+        <div class="w-full max-w-[450px] h-[600px] glass-effect rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-indigo-100/50 transition-all duration-300 hover:shadow-3xl">
             <!-- Header -->
-            <div class="bg-gradient-to-r from-[#3498db] to-[#2980b9] p-4 text-center text-white">
-                <div class="flex items-center justify-center">
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                        </svg>
+            <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 p-5 text-center text-white">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4 shadow-lg">
+                        <span class="text-white font-bold text-lg">
+                            {{ friend.name.charAt(0).toUpperCase() }}
+                        </span>
                     </div>
-                    <h2 class="text-xl font-semibold">
-                        {{ friend.name }}
-                    </h2>
+                    <div class="text-left">
+                        <h2 class="text-xl font-bold">
+                            {{ friend.name }}
+                        </h2>
+                        <p class="text-xs text-indigo-100 opacity-80">
+                            {{ isFriendTyping ? 'Digitando...' : 'Online' }}
+                        </p>
+                    </div>
                 </div>
             </div>
 
             <!-- Chat Messages -->
-            <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
-                <!-- Mensagens regulares -->
+            <div ref="chatContainer" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-br from-white to-indigo-50/30">
                 <div v-for="(msg, index) in messages" 
                      :key="index" 
                      class="flex"
@@ -136,31 +140,35 @@ onUnmounted(() => {
                         'justify-start': msg.sender_id !== currentUser.id
                      }">
                     <div :class="{
-                        'bg-[#3498db] text-white': msg.sender_id === currentUser.id,
-                        'bg-white shadow-sm': msg.sender_id !== currentUser.id
-                    }" class="p-3 rounded-2xl max-w-[250px] break-words">
+                        'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white': msg.sender_id === currentUser.id,
+                        'bg-white shadow-md': msg.sender_id !== currentUser.id
+                    }" class="p-3.5 rounded-2xl max-w-[280px] break-words shadow-sm transition-all duration-300 hover:shadow-md">
                         <p class="text-sm">{{ msg.text }}</p>
                         <small :class="{
-                            'text-blue-100': msg.sender_id === currentUser.id,
+                            'text-indigo-100': msg.sender_id === currentUser.id,
                             'text-gray-500': msg.sender_id !== currentUser.id
-                        }" class="text-xs block text-right mt-1">
+                        }" class="text-xs block text-right mt-1.5">
                             {{ new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
                         </small>
                     </div>
                 </div>
             </div>
 
-            <!-- Indicador "Digitando..." acima da barra de escrita -->
-            <div v-if="isFriendTyping" class="p-2 bg-gray-50 border-t border-gray-100">
+            <!-- Typing Indicator -->
+            <div v-if="isFriendTyping" class="px-6 py-2 bg-gradient-to-br from-white to-indigo-50/30">
                 <div class="flex justify-start">
-                    <div class="bg-white shadow-sm p-2 rounded-2xl max-w-[250px]">
-                        <small class="text-xs text-gray-500 animate-pulse">Digitando...</small>
+                    <div class="bg-white shadow-sm p-2 rounded-2xl max-w-[250px] animate-pulse">
+                        <div class="flex space-x-1 items-center px-2">
+                            <div class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+                            <div class="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+                            <div class="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Chat Input -->
-            <div class="p-4 bg-white border-t border-gray-100">
+            <div class="p-4 bg-white border-t border-indigo-100">
                 <div class="flex items-center space-x-2">
                     <input
                         v-model="newMessage"
@@ -168,13 +176,13 @@ onUnmounted(() => {
                         @keyup.enter="sendMessage"
                         type="text"
                         placeholder="Digite sua mensagem..."
-                        class="w-full p-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-[#3498db]/50 transition duration-300"
+                        class="w-full p-3.5 bg-indigo-50 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-400/50 transition duration-300 placeholder-indigo-300"
                     />
                     <button 
                         @click="sendMessage"
-                        class="bg-[#3498db] text-white p-3 rounded-full hover:bg-[#2980b9] transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#3498db]/50">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+                        class="bg-indigo-600 text-white p-3.5 rounded-full hover:bg-indigo-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 shadow-md hover:shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                     </button>
                 </div>
@@ -182,8 +190,49 @@ onUnmounted(() => {
         </div>
     </div>
 </template>
+
 <style scoped>
-.font-poppins {
-    font-family: 'Poppins', sans-serif;
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Custom scrollbar */
+div::-webkit-scrollbar {
+    width: 6px;
+}
+
+div::-webkit-scrollbar-track {
+    background: rgba(243, 244, 246, 0.5);
+}
+
+div::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.3);
+    border-radius: 3px;
+}
+
+div::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 102, 241, 0.5);
+}
+
+/* Hide scrollbar for Firefox */
+div {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.3) rgba(243, 244, 246, 0.5);
+}
+
+/* Animation for typing indicator */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 1s infinite;
 }
 </style>

@@ -1,40 +1,30 @@
-<nav class="bg-white backdrop-blur-lg border-b border-gray-100 shadow-md fixed top-0 left-0 right-0 z-50">
-    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
+<nav class="fixed w-full z-50 glass-effect border-b border-gray-200">
+    <div class="container mx-auto px-6 py-4">
+        <div class="flex justify-between items-center">
             <!-- Logo and Brand -->
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center">
                 <a href="{{ route('dashboard') }}" class="flex items-center group">
-                    <svg class="w-9 h-9 text-[#3498db] group-hover:text-[#2980b9] transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                     </svg>
-                    <span class="ml-2 text-xl font-semibold text-[#2c3e50] group-hover:text-[#3498db] transition-colors duration-300">
-                        LaravelChat
-                    </span>
+                    <span class="ml-3 text-xl font-bold gradient-text">ConnectFlow</span>
                 </a>
             </div>
 
             <!-- Navigation Links -->
-            <div class="hidden sm:flex items-center space-x-6">
-                <a href="{{ route('dashboard') }}" class="relative group">
-                    <span class="text-[#34495e] font-medium group-hover:text-[#3498db] transition-colors duration-300 
-                        {{ request()->routeIs('dashboard') ? 'text-[#3498db]' : '' }}">
-                        Contatos
-                    </span>
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#3498db] 
-                        group-hover:w-full transition-all duration-300 
-                        {{ request()->routeIs('dashboard') ? 'w-full' : '' }}"></span>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-indigo-600 transition-colors {{ request()->routeIs('dashboard') ? 'text-indigo-600 font-medium' : '' }}">
+                    Contatos
                 </a>
             </div>
 
             <!-- User Actions -->
-            <div class="hidden sm:flex items-center space-x-4">
+            <div class="flex items-center space-x-6">
                 @auth
                     <div class="flex items-center space-x-4">
-                        <div class="text-[#34495e] font-medium">
-                            {{ Auth::user()->name }}
-                        </div>
+                        <span class="text-gray-700">{{ Auth::user()->name }}</span>
                         <a href="{{ route('logout') }}"
-                           class="px-4 py-2 text-[#34495e] hover:bg-gray-100 rounded-lg transition duration-300 ease-in-out"
+                           class="text-gray-700 hover:text-indigo-600 transition-colors"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
@@ -43,14 +33,13 @@
                         </form>
                     </div>
                 @else
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ route('login') }}" class="text-[#34495e] hover:text-[#3498db] transition duration-300">
-                            Entrar
+                    <div class="flex items-center space-x-6">
+                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-indigo-600 transition-colors">
+                            Login
                         </a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" 
-                               class="bg-[#3498db] hover:bg-[#2980b9] text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md hover:shadow-lg">
-                                Registrar
+                            <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors shadow-lg hover:shadow-xl">
+                                Register
                             </a>
                         @endif
                     </div>
@@ -61,4 +50,24 @@
 </nav>
 
 <!-- Compensate for fixed navbar -->
-<div class="h-16"></div>
+<div class="h-20"></div>
+
+<style>
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .gradient-text {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #818cf8;
+    }
+</style>
